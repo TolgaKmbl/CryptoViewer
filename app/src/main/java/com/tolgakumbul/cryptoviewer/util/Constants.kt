@@ -2,8 +2,13 @@ package com.tolgakumbul.cryptoviewer.util
 
 object Constants {
 
-    const val BASE_URL = ""/* Will be added */
-    const val API_KEY = "" /* Will be added */
-    const val CALL_ATTRIBUTES = "" /* Will be added */
+    /**
+    *
+    * Use an open api
+    *
+    */
+    const val BASE_URL = ""
+    const val API_KEY = "" /* Delete if unnecessary */
+    const val CALL_ATTRIBUTES = "" /* Delete if unnecessary */
 
 }
