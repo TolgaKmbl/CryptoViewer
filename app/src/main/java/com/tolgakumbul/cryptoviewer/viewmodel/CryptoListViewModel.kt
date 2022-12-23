@@ -7,6 +7,7 @@ import com.tolgakumbul.cryptoviewer.model.CryptoListItem
 import com.tolgakumbul.cryptoviewer.repository.CryptoRepository
 import com.tolgakumbul.cryptoviewer.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,11 +20,42 @@ class CryptoListViewModel @Inject constructor(
     var errorMessage = mutableStateOf("")
     var isLoading = mutableStateOf(false)
 
+    private var initialCryptoList = listOf<CryptoListItem>()
+    private var isSearchStarted = true
+
+    init {
+        loadCryptos()
+    }
+
+    fun searchCryptoList(query: String) {
+        val listToSearch = if(isSearchStarted) {
+            cryptoList.value
+        } else {
+            initialCryptoList
+        }
+
+        viewModelScope.launch(Dispatchers.Default) {
+            if(query.isEmpty()){
+                cryptoList.value = initialCryptoList
+                isSearchStarted = true
+                return@launch
+            }
+            val results = listToSearch.filter {
+                it.currency.contains(query.trim(), true)
+            }
+            if(isSearchStarted){
+                initialCryptoList = cryptoList.value
+                isSearchStarted = false
+            }
+            cryptoList.value = results
+        }
+    }
+
     fun loadCryptos() {
         viewModelScope.launch {
             isLoading.value = true
             val result = repository.getCryptoList()
-            when(result) {
+            when (result) {
                 is Resource.Success -> {
                     val cryptoItems = result.data!!.mapIndexed { index, cryptoListItem ->
                         CryptoListItem(cryptoListItem.currency, cryptoListItem.price)
