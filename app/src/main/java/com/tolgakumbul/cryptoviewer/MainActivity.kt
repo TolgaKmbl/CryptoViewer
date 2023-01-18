@@ -42,8 +42,8 @@ class MainActivity : ComponentActivity() {
                             it.arguments?.getString("cryptoPrice")
                         }
                         CryptoDetailScreen(
-                            id = cryptoId,
-                            price = cryptoPrice,
+                            id = cryptoId!!,
+                            price = cryptoPrice!!,
                             navController = navController
                         )
                     }

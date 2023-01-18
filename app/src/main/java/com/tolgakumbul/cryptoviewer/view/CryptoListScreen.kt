@@ -180,7 +180,7 @@ fun RetryView(errorMsg: String, onRetry: () -> Unit) {
         Text(text = errorMsg, color = Color.Red, fontSize = 20.sp)
         Spacer(modifier = Modifier.height(10.dp))
         Button(onClick = {
-            onRetry
+            onRetry()
         }, modifier = Modifier.align(Alignment.CenterHorizontally)) {
             Text(text = "Retry")
         }
